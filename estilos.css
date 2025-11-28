@@ -1,0 +1,11 @@
+.resaltado{
+    text-decoration: underline;
+    color:white;
+    background-color: black;
+}
+
+.cambiar{
+    color:white;
+    background-color: black;
+    text-decoration: wavy;
+}
