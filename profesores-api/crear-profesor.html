@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear Profesor</title>
+</head>
+<body>
+  <h1>Crear profesor</h1>
+  <p><a href="./login.html">Ir al login</a> (hay que loguearse primero)</p>
+
+  <form id="form-crear">
+    <label>
+      Nombre:
+      <input type="text" id="nombre" required />
+    </label>
+    <br /><br />
+    <label>
+      Apellido:
+      <input type="text" id="apellido" required />
+    </label>
+    <br /><br />
+    <label>
+      Edad:
+      <input type="number" id="edad" />
+    </label>
+    <br /><br />
+    <label>
+      Materia:
+      <input type="text" id="materia" />
+    </label>
+    <br /><br />
+    <button type="submit">Crear</button>
+  </form>
+
+  <p id="mensaje"></p>
+  <pre id="resultado"></pre>
+
+  <script src="./crear-profesor.js"></script>
+</body>
+</html>

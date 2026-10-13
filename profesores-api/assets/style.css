@@ -1,0 +1,28 @@
+:root {
+  color-scheme: light;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  color: #182230;
+  background: #f3f6fb;
+}
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem;
+}
+
+main {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 2rem;
+  border: 1px solid #dce4ee;
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 16px 50px #25385812;
+}
+
+h1, h2 { color: #143b66; }
+code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+pre { overflow-x: auto; padding: 1rem; border-radius: 10px; background: #f1f5f9; }
+.callout { padding: 1rem; border-left: 4px solid #2b7bbb; background: #edf7ff; }
+button { padding: .65rem 1rem; border: 0; border-radius: 8px; background: #145da0; color: white; cursor: pointer; }
+#answer { min-height: 1.5rem; color: #145da0; }

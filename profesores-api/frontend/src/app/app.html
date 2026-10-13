@@ -1,0 +1,146 @@
+<main class="page">
+  <header class="heading">
+    <p class="eyebrow">Administración escolar</p>
+    <h1>Profesores y estudiantes</h1>
+    <p>Consultá y gestioná los datos de la escuela.</p>
+  </header>
+
+  <nav class="tabs" aria-label="Secciones">
+    <button type="button" [class.active]="seccion() === 'profesores'" (click)="seleccionarSeccion('profesores')">Profesores</button>
+    <button type="button" [class.active]="seccion() === 'estudiantes'" (click)="seleccionarSeccion('estudiantes')">Estudiantes</button>
+  </nav>
+
+  @if (mensaje()) {
+    <p class="notice success" role="status">{{ mensaje() }}</p>
+  }
+  @if (error()) {
+    <p class="notice error" role="alert">{{ error() }}</p>
+  }
+
+  @if (!token()) {
+    <section class="panel">
+      <h2>Iniciar sesión</h2>
+      <p>Necesitás una sesión para crear, modificar o eliminar registros.</p>
+      <form #loginForm="ngForm" (ngSubmit)="iniciarSesion()">
+        <div class="form-grid login-grid">
+          <label>
+            Usuario
+            <input name="username" [(ngModel)]="username" autocomplete="username" required>
+          </label>
+          <label>
+            Contraseña
+            <input name="password" [(ngModel)]="password" type="password" autocomplete="current-password" required>
+          </label>
+        </div>
+        <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
+      </form>
+    </section>
+  } @else {
+    <section class="panel">
+      <div class="panel-heading">
+        <div>
+          <h2>{{ seccion() === 'profesores' ? (profesorEditandoId() === null ? 'Nuevo profesor' : 'Modificar profesor') : (estudianteEditandoId() === null ? 'Nuevo estudiante' : 'Modificar estudiante') }}</h2>
+          <p>Completá los datos y guardalos en la API.</p>
+        </div>
+        <button class="secondary" type="button" (click)="cerrarSesion()">Cerrar sesión</button>
+      </div>
+
+      @if (seccion() === 'profesores') {
+        <form #profesorForm="ngForm" (ngSubmit)="guardarProfesor()">
+          <div class="form-grid">
+            <label>Nombre<input name="profesorNombre" [(ngModel)]="nuevoProfesor.nombre" required></label>
+            <label>Apellido<input name="profesorApellido" [(ngModel)]="nuevoProfesor.apellido" required></label>
+            <label>Materia<input name="materia" [(ngModel)]="nuevoProfesor.materia" required></label>
+            <label>Edad <span class="optional">(opcional)</span><input name="profesorEdad" [(ngModel)]="nuevoProfesor.edad" type="number" min="0"></label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" [disabled]="profesorForm.invalid || guardando()">
+              {{ guardando() ? 'Guardando…' : (profesorEditandoId() === null ? 'Crear profesor' : 'Guardar cambios') }}
+            </button>
+            @if (profesorEditandoId() !== null) {
+              <button class="secondary" type="button" (click)="cancelarEdicionProfesor()">Cancelar edición</button>
+            }
+          </div>
+        </form>
+      } @else {
+        <form #estudianteForm="ngForm" (ngSubmit)="guardarEstudiante()">
+          <div class="form-grid">
+            <label>Nombre<input name="estudianteNombre" [(ngModel)]="nuevoEstudiante.nombre" required></label>
+            <label>Apellido<input name="estudianteApellido" [(ngModel)]="nuevoEstudiante.apellido" required></label>
+            <label>Curso <span class="optional">(opcional)</span><input name="curso" [(ngModel)]="nuevoEstudiante.curso"></label>
+            <label>Carrera <span class="optional">(opcional)</span><input name="carrera" [(ngModel)]="nuevoEstudiante.carrera"></label>
+            <label>Edad <span class="optional">(opcional)</span><input name="estudianteEdad" [(ngModel)]="nuevoEstudiante.edad" type="number" min="0"></label>
+          </div>
+          <div class="form-actions">
+            <button type="submit" [disabled]="estudianteForm.invalid || guardando()">
+              {{ guardando() ? 'Guardando…' : (estudianteEditandoId() === null ? 'Crear estudiante' : 'Guardar cambios') }}
+            </button>
+            @if (estudianteEditandoId() !== null) {
+              <button class="secondary" type="button" (click)="cancelarEdicionEstudiante()">Cancelar edición</button>
+            }
+          </div>
+        </form>
+      }
+    </section>
+  }
+
+  @if (seccion() === 'profesores') {
+    <section class="records" aria-label="Lista de profesores">
+      <h2>Profesores actuales</h2>
+      @if (profesoresCargando()) {
+        <p class="notice" role="status">Cargando profesores…</p>
+      } @else if (profesores().length === 0) {
+        <p class="notice">No hay profesores para mostrar.</p>
+      } @else {
+        <div class="grid">
+          @for (profesor of profesores(); track profesor.id) {
+            <article class="card">
+              <div class="card-top">
+                <span class="avatar" aria-hidden="true">{{ profesor.nombre.charAt(0) }}{{ profesor.apellido.charAt(0) }}</span>
+                <span class="id">ID {{ profesor.id }}</span>
+              </div>
+              <h3>{{ profesor.nombre }} {{ profesor.apellido }}</h3>
+              <p class="subject">{{ profesor.materia }}</p>
+              <p class="age">Edad: {{ profesor.edad ?? 'Sin dato' }}</p>
+              @if (token()) {
+                <div class="card-actions">
+                  <button class="secondary" type="button" (click)="editarProfesor(profesor)">Modificar</button>
+                  <button class="danger" type="button" (click)="eliminarProfesor(profesor)">Eliminar</button>
+                </div>
+              }
+            </article>
+          }
+        </div>
+      }
+    </section>
+  } @else {
+    <section class="records" aria-label="Lista de estudiantes">
+      <h2>Estudiantes actuales</h2>
+      @if (estudiantesCargando()) {
+        <p class="notice" role="status">Cargando estudiantes…</p>
+      } @else if (estudiantes().length === 0) {
+        <p class="notice">No hay estudiantes para mostrar.</p>
+      } @else {
+        <div class="grid">
+          @for (estudiante of estudiantes(); track estudiante.id) {
+            <article class="card">
+              <div class="card-top">
+                <span class="avatar" aria-hidden="true">{{ estudiante.nombre.charAt(0) }}{{ estudiante.apellido.charAt(0) }}</span>
+                <span class="id">ID {{ estudiante.id }}</span>
+              </div>
+              <h3>{{ estudiante.nombre }} {{ estudiante.apellido }}</h3>
+              <p class="subject">{{ estudiante.carrera ?? 'Sin carrera' }}</p>
+              <p class="age">Curso: {{ estudiante.curso ?? 'Sin curso' }} · Edad: {{ estudiante.edad ?? 'Sin dato' }}</p>
+              @if (token()) {
+                <div class="card-actions">
+                  <button class="secondary" type="button" (click)="editarEstudiante(estudiante)">Modificar</button>
+                  <button class="danger" type="button" (click)="eliminarEstudiante(estudiante)">Eliminar</button>
+                </div>
+              }
+            </article>
+          }
+        </div>
+      }
+    </section>
+  }
+</main>

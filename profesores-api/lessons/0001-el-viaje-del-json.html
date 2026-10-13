@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lección 1 · El viaje del JSON</title>
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<main>
+  <p>Lección 1 · API de profesores</p>
+  <h1>El viaje del JSON</h1>
+  <p>Antes de escribir Angular, vamos a entender el contrato que ya ofrece tu servidor.</p>
+
+  <h2>1. ¿Qué hace cada parte?</h2>
+  <ol>
+    <li><strong>Angular</strong> se ejecuta en el navegador y pide información.</li>
+    <li><strong>Express</strong> recibe la petición en una ruta.</li>
+    <li>El controlador consulta el modelo, que obtiene los datos de MySQL.</li>
+    <li>El servidor devuelve una respuesta JSON.</li>
+    <li>Angular lee el JSON y lo convierte en elementos visibles.</li>
+  </ol>
+
+  <h2>2. La primera ruta</h2>
+  <p>En <code>server.js</code> se monta el router con el prefijo <code>/profesores</code>. En <code>routes/profesoresRoutes.js</code> se define <code>GET /listar</code>. Juntas, esas dos partes forman:</p>
+  <pre><code>GET http://localhost:3000/profesores/listar</code></pre>
+  <p>La consulta es pública: no necesita token. El controlador responde con una forma parecida a esta:</p>
+  <pre><code>{
+  "mensaje": "consulta profesores",
+  "data": [
+    { "nombre": "Ana", "apellido": "Díaz", "edad": 35, "materia": "Matemática" }
+  ]
+}</code></pre>
+
+  <div class="callout"><strong>Idea clave:</strong> la lista está dentro de <code>data</code>. Cuando Angular la reciba, usaremos <code>respuesta.data</code>; la respuesta completa no es directamente el array.</div>
+
+  <h2>3. JavaScript primero, tipos después</h2>
+  <p>En TypeScript describiremos la forma de un profesor. Una interfaz no crea datos ni consulta al servidor; solo ayuda a que el editor y el compilador detecten errores mientras programamos.</p>
+  <pre><code>interface Profesor {
+  nombre: string;
+  apellido: string;
+  edad: number | null;
+  materia: string;
+}</code></pre>
+  <p>Esto se parece a documentar el objeto que ya manda tu entidad <code>Profesor</code> en <code>entities/Profesor.js</code>. La respuesta actual observada no incluye <code>id</code>; para editar o borrar necesitaremos que el backend lo incluya.</p>
+
+  <h2>4. Comprobación rápida</h2>
+  <p>Sin mirar arriba: ¿qué propiedad contiene el array de profesores que devuelve la API?</p>
+  <button type="button" id="check">Comprobar</button>
+  <p id="answer" aria-live="polite"></p>
+
+  <h2>Tu siguiente paso</h2>
+  <p>Cuando el servidor esté funcionando, abrí <code>http://localhost:3000/profesores/listar</code> en el navegador. Mirá el JSON y comprobá dónde aparece la lista. Todavía no hace falta cambiar nada.</p>
+
+  <h2>Fuentes oficiales</h2>
+  <ul>
+    <li><a href="https://angular.dev/tutorials/first-app">Primeros pasos con Angular</a></li>
+    <li><a href="https://angular.dev/guide/http">HTTP Client de Angular</a></li>
+    <li><a href="https://www.typescriptlang.org/docs/handbook/intro.html">Introducción oficial a TypeScript</a></li>
+  </ul>
+</main>
+<script>
+  document.querySelector('#check').addEventListener('click', () => {
+    document.querySelector('#answer').textContent = 'Correcto: data. La respuesta entera también tiene mensaje.';
+  });
+</script>
+</body>
+</html>
