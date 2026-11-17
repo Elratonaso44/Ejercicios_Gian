@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Taller de electrónica</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header><div><p>TALLER DE ELECTRÓNICA</p><h1>Gestión de reparaciones</h1></div><span id="usuario"></span><button id="salir" hidden>Cerrar sesión</button></header>
+  <main>
+    <p id="mensaje" role="status"></p>
+    <section id="acceso" class="panel acceso">
+      <form id="login"><h2>Iniciar sesión</h2><label>Email<input name="email" type="email" required></label><label>Contraseña<input name="contrasena" type="password" required></label><button>Ingresar</button></form>
+      <form id="registro"><h2>Crear cuenta</h2><label>Nombre<input name="nombre" maxlength="100" required></label><label>Email<input name="email" type="email" maxlength="150" required></label><label>Contraseña<input name="contrasena" type="password" minlength="6" required></label><button>Registrarse</button></form>
+    </section>
+    <nav><button type="button" data-seccion="clientes">Clientes</button><button type="button" data-seccion="dispositivos">Dispositivos</button><button type="button" data-seccion="reparaciones">Reparaciones</button></nav>
+    <section id="clientes" class="panel seccion">
+      <h2>Clientes</h2><form id="form-clientes" class="editor" hidden><input name="id" type="hidden"><label>Nombre<input name="nombre" maxlength="100" required></label><label>Teléfono<input name="telefono" maxlength="30" required></label><div><button>Guardar</button> <button type="button" class="cancelar">Cancelar</button></div></form><div class="tabla"><table><thead><tr><th>Nombre</th><th>Teléfono</th><th>Acciones</th></tr></thead><tbody id="lista-clientes"></tbody></table></div>
+    </section>
+    <section id="dispositivos" class="panel seccion" hidden>
+      <h2>Dispositivos</h2><form id="form-dispositivos" class="editor" hidden><input name="id" type="hidden"><label>Dispositivo<input name="nombre" maxlength="100" required></label><label>Marca<input name="marca" maxlength="100" required></label><label>Cliente<select name="cliente_id" required></select></label><div><button>Guardar</button> <button type="button" class="cancelar">Cancelar</button></div></form><div class="tabla"><table><thead><tr><th>Dispositivo</th><th>Marca</th><th>Cliente</th><th>Acciones</th></tr></thead><tbody id="lista-dispositivos"></tbody></table></div>
+    </section>
+    <section id="reparaciones" class="panel seccion" hidden>
+      <h2>Reparaciones</h2><form id="form-reparaciones" class="editor" hidden><input name="id" type="hidden"><label>Dispositivo<select name="dispositivo_id" required></select></label><label>Tipo de falla<select name="tipo_falla_id" required></select></label><label>Descripción<input name="descripcion" maxlength="255" required></label><label>Estado<select name="estado"><option>Pendiente</option><option>En reparación</option><option>Terminada</option><option>Entregada</option></select></label><div><button>Guardar</button> <button type="button" class="cancelar">Cancelar</button></div></form><div class="tabla"><table><thead><tr><th>Dispositivo</th><th>Falla</th><th>Descripción</th><th>Estado</th><th>Registrada por</th><th>Acciones</th></tr></thead><tbody id="lista-reparaciones"></tbody></table></div>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,10 @@
+import { Router } from "express";
+import controlador from "../controllers/dispositivoController.js";
+import verificarSesion from "../middleware/sesion.js";
+const router = Router();
+router.get("/", controlador.consultar);
+router.get("/:id", controlador.consultar);
+router.post("/", verificarSesion, controlador.ingresar);
+router.put("/:id", verificarSesion, controlador.actualizar);
+router.delete("/:id", verificarSesion, controlador.borrar);
+export default router;
